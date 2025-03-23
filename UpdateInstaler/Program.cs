@@ -12,8 +12,8 @@ try
         Console.Clear();
         Console.Write($"{e.BytesReceived / 1024 / 1024}MB / {e.TotalBytesToReceive / 1024 / 1024}MB");
     };
-    File.Delete(Directory.GetCurrentDirectory()+ "\\DiscordReport.exe");
-    File.Delete(Directory.GetCurrentDirectory()+ "\\Newtonsoft.Json.dll");
+    //File.Delete(Directory.GetCurrentDirectory()+ "\\DiscordReport.exe");
+    //File.Delete(Directory.GetCurrentDirectory()+ "\\Newtonsoft.Json.dll");
     var filePath = Directory.GetCurrentDirectory() + "\\";
     await c.DownloadFileTaskAsync(githubProjectLink + "DiscordReport.exe", filePath + "DiscordReport.exe");
     await c.DownloadFileTaskAsync(githubProjectLink + "Newtonsoft.Json.dll", filePath + "Newtonsoft.Json.dll");

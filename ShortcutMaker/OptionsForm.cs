@@ -131,7 +131,8 @@ namespace ShortcutMaker
 
         private void ButtonUpdate_Click(object sender, EventArgs e)
         {
-            //TODO Download new version
+            buttonUpdate.Enabled = false;
+            Form1.BaseForm.InstalUpdate();
         }
     }
 }

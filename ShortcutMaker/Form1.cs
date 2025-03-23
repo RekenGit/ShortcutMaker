@@ -47,14 +47,14 @@ namespace ShortcutMaker
             try
             {
                 string newVersion = version;
-                var c = new WebClient();
+                WebClient c = new();
                 var s = await c.DownloadStringTaskAsync(githubProjectLink + "Version.txt");
                 if (s.Contains("~"))
                 {
                     string[] arr = s.Split('~');
                     newVersion = arr[1];
                 }
-                if (newVersion != version)
+                if (float.Parse(newVersion.Replace('.', ',')) > float.Parse(version.Replace('.', ',')))
                 {
                     optionsForm.buttonUpdate.Text = $"Update to {newVersion}";
                     optionsForm.buttonUpdate.Enabled = true;
@@ -69,27 +69,17 @@ namespace ShortcutMaker
 
             try
             {
-                string newVersion = version;
-                var c = new WebClient();
-                var s = await c.DownloadStringTaskAsync(githubProjectLink + "Version.txt");
-                if (s.Contains("~"))
+                WebClient c = new();
+                c.DownloadProgressChanged += (se, e) =>
                 {
-                    string[] arr = s.Split('~');
-                    newVersion = arr[1];
-                }
-                if (float.Parse(newVersion.Replace('.', ',')) > float.Parse(version.Replace('.', ',')))
-                {
-                    c.DownloadProgressChanged += (se, e) =>
-                    {
-                        optionsForm.labelInstalInfo.Text = $"{e.BytesReceived / 1024 / 1024}MB / {e.TotalBytesToReceive / 1024 / 1024}MB";
-                    };
-                    Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\update");
-                    string filePath = Directory.GetCurrentDirectory() + "\\update\\";
-                    foreach (string file in filesToDownload)
-                        await c.DownloadFileTaskAsync(githubProjectLink + file, filePath + "\\" + file);
-                    try { Process.Start(filePath + "\\ShortcutMakerUpdate.exe"); } catch { }
-                    Process.GetCurrentProcess().Kill();
-                }
+                    optionsForm.labelInstalInfo.Text = $"{e.BytesReceived / 1024 / 1024}MB / {e.TotalBytesToReceive / 1024 / 1024}MB";
+                };
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\update");
+                string filePath = Directory.GetCurrentDirectory() + "\\update\\";
+                foreach (string file in filesToDownload)
+                    await c.DownloadFileTaskAsync(githubProjectLink + file, filePath + "\\" + file);
+                try { Process.Start(filePath + "\\ShortcutMakerUpdate.exe"); } catch { }
+                Process.GetCurrentProcess().Kill();
             }
             catch { }
         }
