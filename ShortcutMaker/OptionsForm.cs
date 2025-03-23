@@ -132,6 +132,7 @@ namespace ShortcutMaker
         private void ButtonUpdate_Click(object sender, EventArgs e)
         {
             buttonUpdate.Enabled = false;
+            buttonUpdate.Text = "Updating...";
             Form1.BaseForm.InstalUpdate();
         }
     }

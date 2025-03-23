@@ -171,7 +171,7 @@
             buttonUpdate.Name = "buttonUpdate";
             buttonUpdate.Size = new Size(165, 23);
             buttonUpdate.TabIndex = 4;
-            buttonUpdate.Text = "Update";
+            buttonUpdate.Text = "No update avaible";
             buttonUpdate.UseVisualStyleBackColor = false;
             buttonUpdate.Click += ButtonUpdate_Click;
             // 
@@ -179,9 +179,9 @@
             // 
             labelVersionInstaled.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelVersionInstaled.ForeColor = Color.White;
-            labelVersionInstaled.Location = new Point(120, 42);
+            labelVersionInstaled.Location = new Point(138, 42);
             labelVersionInstaled.Name = "labelVersionInstaled";
-            labelVersionInstaled.Size = new Size(103, 20);
+            labelVersionInstaled.Size = new Size(85, 20);
             labelVersionInstaled.TabIndex = 3;
             labelVersionInstaled.Text = "1.0";
             labelVersionInstaled.TextAlign = ContentAlignment.MiddleCenter;
@@ -192,9 +192,9 @@
             label11.ForeColor = Color.White;
             label11.Location = new Point(4, 43);
             label11.Name = "label11";
-            label11.Size = new Size(110, 20);
+            label11.Size = new Size(128, 20);
             label11.TabIndex = 0;
-            label11.Text = "Instaled Version:";
+            label11.Text = "Application version:";
             label11.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // label12

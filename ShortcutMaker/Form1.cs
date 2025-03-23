@@ -58,6 +58,7 @@ namespace ShortcutMaker
                 {
                     optionsForm.buttonUpdate.Text = $"Update to {newVersion}";
                     optionsForm.buttonUpdate.Enabled = true;
+                    MessageBox.Show("New version is available!\nGo to settings tab and Update.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch { }
@@ -77,7 +78,7 @@ namespace ShortcutMaker
                 Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\update");
                 string filePath = Directory.GetCurrentDirectory() + "\\update\\";
                 foreach (string file in filesToDownload)
-                    await c.DownloadFileTaskAsync(githubProjectLink + file, filePath + "\\" + file);
+                    await c.DownloadFileTaskAsync(githubProjectLink + "UpdateInstaller/UpdateFiles/" + file, filePath + "\\" + file);
                 try { Process.Start(filePath + "\\ShortcutMakerUpdate.exe"); } catch { }
                 Process.GetCurrentProcess().Kill();
             }
