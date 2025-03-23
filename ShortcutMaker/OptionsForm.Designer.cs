@@ -34,7 +34,8 @@
             returnButton = new Button();
             panel = new FlowLayoutPanel();
             panel4 = new Panel();
-            button1 = new Button();
+            labelInstalInfo = new Label();
+            buttonUpdate = new Button();
             labelVersionInstaled = new Label();
             label11 = new Label();
             label12 = new Label();
@@ -58,7 +59,6 @@
             colorPicker_MouseHover = new ColorPickerPanel();
             label1 = new Label();
             label2 = new Label();
-            labelInstalInfo = new Label();
             panel1.SuspendLayout();
             panel.SuspendLayout();
             panel4.SuspendLayout();
@@ -139,7 +139,7 @@
             // 
             panel4.BackColor = Color.FromArgb(80, 80, 100);
             panel4.Controls.Add(labelInstalInfo);
-            panel4.Controls.Add(button1);
+            panel4.Controls.Add(buttonUpdate);
             panel4.Controls.Add(labelVersionInstaled);
             panel4.Controls.Add(label11);
             panel4.Controls.Add(label12);
@@ -149,20 +149,31 @@
             panel4.Size = new Size(226, 155);
             panel4.TabIndex = 7;
             // 
-            // button1
+            // labelInstalInfo
             // 
-            button1.BackColor = Color.FromArgb(80, 100, 100);
-            button1.Enabled = false;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(31, 92);
-            button1.Margin = new Padding(30);
-            button1.Name = "button1";
-            button1.Size = new Size(165, 23);
-            button1.TabIndex = 4;
-            button1.Text = "Update";
-            button1.UseVisualStyleBackColor = false;
-            button1.Click += button1_Click;
+            labelInstalInfo.Dock = DockStyle.Bottom;
+            labelInstalInfo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            labelInstalInfo.ForeColor = Color.White;
+            labelInstalInfo.ImageAlign = ContentAlignment.TopLeft;
+            labelInstalInfo.Location = new Point(0, 121);
+            labelInstalInfo.Name = "labelInstalInfo";
+            labelInstalInfo.Size = new Size(226, 34);
+            labelInstalInfo.TabIndex = 5;
+            // 
+            // buttonUpdate
+            // 
+            buttonUpdate.BackColor = Color.FromArgb(80, 100, 100);
+            buttonUpdate.Enabled = false;
+            buttonUpdate.FlatStyle = FlatStyle.Flat;
+            buttonUpdate.ForeColor = Color.White;
+            buttonUpdate.Location = new Point(31, 92);
+            buttonUpdate.Margin = new Padding(30);
+            buttonUpdate.Name = "buttonUpdate";
+            buttonUpdate.Size = new Size(165, 23);
+            buttonUpdate.TabIndex = 4;
+            buttonUpdate.Text = "Update";
+            buttonUpdate.UseVisualStyleBackColor = false;
+            buttonUpdate.Click += ButtonUpdate_Click;
             // 
             // labelVersionInstaled
             // 
@@ -426,17 +437,6 @@
             label2.Text = "Shortcut [Hovered]";
             label2.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // labelInstalInfo
-            // 
-            labelInstalInfo.Dock = DockStyle.Bottom;
-            labelInstalInfo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            labelInstalInfo.ForeColor = Color.White;
-            labelInstalInfo.ImageAlign = ContentAlignment.TopLeft;
-            labelInstalInfo.Location = new Point(0, 121);
-            labelInstalInfo.Name = "labelInstalInfo";
-            labelInstalInfo.Size = new Size(226, 34);
-            labelInstalInfo.TabIndex = 5;
-            // 
             // OptionsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -486,10 +486,10 @@
         private Label label10;
         public ComboBox comboBoxImageLayout;
         private Panel panel4;
-        private Button button1;
         private Label label11;
         private Label label12;
         public Label labelVersionInstaled;
         public Label labelInstalInfo;
+        public Button buttonUpdate;
     }
 }

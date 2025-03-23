@@ -6,7 +6,7 @@ namespace ShortcutMaker
     public partial class Form1 : Form
     {
         private readonly string version = "1.0";
-        private readonly string githubProjectLink = "https://github.com/RekenGit/Raportowanie/raw/main/";
+        private readonly string githubProjectLink = "https://github.com/RekenGit/ShortcutMaker/tree/master/";
         string[] filesToDownload = { "ShortcutMakerUpdate.deps.json", "ShortcutMakerUpdate.dll", "ShortcutMakerUpdate.exe", "ShortcutMakerUpdate.pdb", "ShortcutMakerUpdate.runtimeconfig.json" };
 
         public static Form1 BaseForm { get; private set; }
@@ -39,9 +39,31 @@ namespace ShortcutMaker
             LoadShortcutsFromFile();
             OpenChildForm(mainForm);
             optionsForm.labelVersionInstaled.Text = version;
+            CheckForUpdate();
         }
 
         private async void CheckForUpdate()
+        {
+            try
+            {
+                string newVersion = version;
+                var c = new WebClient();
+                var s = await c.DownloadStringTaskAsync(githubProjectLink + "Version.txt");
+                if (s.Contains("~"))
+                {
+                    string[] arr = s.Split('~');
+                    newVersion = arr[1];
+                }
+                if (newVersion != version)
+                {
+                    optionsForm.buttonUpdate.Text = $"Update to {newVersion}";
+                    optionsForm.buttonUpdate.Enabled = true;
+                }
+            }
+            catch { }
+        }
+
+        public async void InstalUpdate()
         {
             if (Directory.Exists(Directory.GetCurrentDirectory() + "\\update")) Directory.Delete(Directory.GetCurrentDirectory() + "\\update", true);
 
@@ -49,7 +71,7 @@ namespace ShortcutMaker
             {
                 string newVersion = version;
                 var c = new WebClient();
-                var s = await c.DownloadStringTaskAsync(githubProjectLink + "version.txt");
+                var s = await c.DownloadStringTaskAsync(githubProjectLink + "Version.txt");
                 if (s.Contains("~"))
                 {
                     string[] arr = s.Split('~');
@@ -63,7 +85,8 @@ namespace ShortcutMaker
                     };
                     Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\update");
                     string filePath = Directory.GetCurrentDirectory() + "\\update\\";
-                    foreach (string file in filesToDownload) await c.DownloadFileTaskAsync(githubProjectLink + file, filePath + "\\" + file);
+                    foreach (string file in filesToDownload)
+                        await c.DownloadFileTaskAsync(githubProjectLink + file, filePath + "\\" + file);
                     try { Process.Start(filePath + "\\ShortcutMakerUpdate.exe"); } catch { }
                     Process.GetCurrentProcess().Kill();
                 }

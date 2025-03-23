@@ -1,8 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Net;
 
+
 try
 {
+    string githubProjectLink = "https://github.com/RekenGit/ShortcutMaker/tree/master/";
+
     var c = new WebClient();
     c.DownloadProgressChanged += (se, e) =>
     {
@@ -12,8 +15,8 @@ try
     File.Delete(Directory.GetCurrentDirectory()+ "\\DiscordReport.exe");
     File.Delete(Directory.GetCurrentDirectory()+ "\\Newtonsoft.Json.dll");
     var filePath = Directory.GetCurrentDirectory() + "\\";
-    await c.DownloadFileTaskAsync("https://github.com/RekenGit/Raportowanie/raw/main/DiscordReport.exe", filePath + "DiscordReport.exe");
-    await c.DownloadFileTaskAsync("https://github.com/RekenGit/Raportowanie/raw/main/Newtonsoft.Json.dll", filePath + "Newtonsoft.Json.dll");
+    await c.DownloadFileTaskAsync(githubProjectLink + "DiscordReport.exe", filePath + "DiscordReport.exe");
+    await c.DownloadFileTaskAsync(githubProjectLink + "Newtonsoft.Json.dll", filePath + "Newtonsoft.Json.dll");
 
     try { Process.Start(filePath + "DiscordReport.exe"); } catch { }
     Process.GetCurrentProcess().Kill();

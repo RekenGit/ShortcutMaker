@@ -129,7 +129,7 @@ namespace ShortcutMaker
             UnsavedChanges();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ButtonUpdate_Click(object sender, EventArgs e)
         {
             //TODO Download new version
         }
