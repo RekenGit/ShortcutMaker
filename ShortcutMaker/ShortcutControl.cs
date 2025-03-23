@@ -8,7 +8,7 @@ namespace ShortcutMaker
         static int lastId = 0;
         public int Id { get; set; }
         public string Title { get; set; }
-        public Bitmap ShortcutIcon { get; set; }
+        public Bitmap ShortcutIcon { get; set; } = new(120, 120);
         public bool IsIconVisible { get; set; }
         public int FontSize { get; set; }
         public bool IsAnimated { get; set; }

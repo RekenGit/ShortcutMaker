@@ -128,5 +128,10 @@ namespace ShortcutMaker
             Form1.BaseForm.mainForm.panel.BackgroundImageLayout = (ImageLayout)comboBoxImageLayout.SelectedIndex;
             UnsavedChanges();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //TODO Download new version
+        }
     }
 }

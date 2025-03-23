@@ -1,7 +1,14 @@
+using System.Diagnostics;
+using System.Net;
+
 namespace ShortcutMaker
 {
     public partial class Form1 : Form
     {
+        private readonly string version = "1.0";
+        private readonly string githubProjectLink = "https://github.com/RekenGit/Raportowanie/raw/main/";
+        string[] filesToDownload = { "ShortcutMakerUpdate.deps.json", "ShortcutMakerUpdate.dll", "ShortcutMakerUpdate.exe", "ShortcutMakerUpdate.pdb", "ShortcutMakerUpdate.runtimeconfig.json" };
+
         public static Form1 BaseForm { get; private set; }
 
         public MainForm mainForm = new();
@@ -31,6 +38,37 @@ namespace ShortcutMaker
             LoadSettingsFromFile();
             LoadShortcutsFromFile();
             OpenChildForm(mainForm);
+            optionsForm.labelVersionInstaled.Text = version;
+        }
+
+        private async void CheckForUpdate()
+        {
+            if (Directory.Exists(Directory.GetCurrentDirectory() + "\\update")) Directory.Delete(Directory.GetCurrentDirectory() + "\\update", true);
+
+            try
+            {
+                string newVersion = version;
+                var c = new WebClient();
+                var s = await c.DownloadStringTaskAsync(githubProjectLink + "version.txt");
+                if (s.Contains("~"))
+                {
+                    string[] arr = s.Split('~');
+                    newVersion = arr[1];
+                }
+                if (float.Parse(newVersion.Replace('.', ',')) > float.Parse(version.Replace('.', ',')))
+                {
+                    c.DownloadProgressChanged += (se, e) =>
+                    {
+                        optionsForm.labelInstalInfo.Text = $"{e.BytesReceived / 1024 / 1024}MB / {e.TotalBytesToReceive / 1024 / 1024}MB";
+                    };
+                    Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\update");
+                    string filePath = Directory.GetCurrentDirectory() + "\\update\\";
+                    foreach (string file in filesToDownload) await c.DownloadFileTaskAsync(githubProjectLink + file, filePath + "\\" + file);
+                    try { Process.Start(filePath + "\\ShortcutMakerUpdate.exe"); } catch { }
+                    Process.GetCurrentProcess().Kill();
+                }
+            }
+            catch { }
         }
 
         private Form activeForm = null;
@@ -248,7 +286,5 @@ namespace ShortcutMaker
             editForm.ChangeIconsColor(c);
             optionsForm.ChangeIconsColor(c);
         }
-        // TODO
-        // Fix size of the aplication on lock change
     }
 }

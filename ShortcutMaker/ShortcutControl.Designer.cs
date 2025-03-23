@@ -96,6 +96,7 @@
             // pictureBoxIcon
             // 
             pictureBoxIcon.BackgroundImage = ResourceTemp.no_image;
+            pictureBoxIcon.BackgroundImageLayout = ImageLayout.Zoom;
             pictureBoxIcon.Location = new Point(3, 3);
             pictureBoxIcon.Name = "pictureBoxIcon";
             pictureBoxIcon.Size = new Size(80, 80);
