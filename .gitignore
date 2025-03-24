@@ -79,7 +79,6 @@ StyleCopReport.xml
 *.iobj
 *.pch
 *.pdb
-!**/UpdateFiles/*
 *.ipdb
 *.pgc
 *.pgd
@@ -362,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+!**/UpdateFiles/*
+!**/ShortcutMakerInstaller/*
+ShortcutMakerInstaller/Debug/*.exe
