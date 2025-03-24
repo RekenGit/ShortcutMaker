@@ -47,6 +47,8 @@ namespace ShortcutMaker
             string value = textBoxColor.Text.Replace("#", "");
             if (value.Length > 6)
                 value = value.Substring(1, 6);
+            if (string.IsNullOrEmpty(value))
+                value = "000000";
             if (!VerifyHex(value))
             {
                 MessageBox.Show($"Pleas make sure the digits are Hexadecimal.", "Wrong value", MessageBoxButtons.OK);

@@ -51,10 +51,5 @@
             optionsButton.BackgroundImage = Settings.OptionsIcon;
             editButton.BackgroundImage = Settings.EditIcon;
         }
-
-        private void panel_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show($"size: {Form1.BaseForm.Size}");
-        }
     }
 }

@@ -5,9 +5,9 @@ namespace ShortcutMaker
 {
     public partial class Form1 : Form
     {
-        private readonly string version = "1.0";
+        private readonly string version = "1.1";
         private readonly string githubProjectLink = "https://github.com/RekenGit/ShortcutMaker/tree/master/";
-        string[] filesToDownload = { "ShortcutMakerUpdate.deps.json", "ShortcutMakerUpdate.dll", "ShortcutMakerUpdate.exe", "ShortcutMakerUpdate.pdb", "ShortcutMakerUpdate.runtimeconfig.json" };
+        string[] filesToDownload = ["ShortcutMakerUpdate.deps.json", "ShortcutMakerUpdate.dll", "ShortcutMakerUpdate.exe", "ShortcutMakerUpdate.pdb", "ShortcutMakerUpdate.runtimeconfig.json"];
 
         public static Form1 BaseForm { get; private set; }
 
@@ -42,14 +42,18 @@ namespace ShortcutMaker
             CheckForUpdate();
         }
 
+        #region Update
         private async void CheckForUpdate()
         {
+            foreach (string file in filesToDownload)
+                if (File.Exists(Directory.GetCurrentDirectory() + $"\\{file}"))
+                    File.Delete(Directory.GetCurrentDirectory() + $"\\{file}");
             try
             {
                 string newVersion = version;
                 WebClient c = new();
                 var s = await c.DownloadStringTaskAsync(githubProjectLink + "Version.txt");
-                if (s.Contains("~"))
+                if (s.Contains('~'))
                 {
                     string[] arr = s.Split('~');
                     newVersion = arr[1];
@@ -66,8 +70,6 @@ namespace ShortcutMaker
 
         public async void InstalUpdate()
         {
-            if (Directory.Exists(Directory.GetCurrentDirectory() + "\\update")) Directory.Delete(Directory.GetCurrentDirectory() + "\\update", true);
-
             try
             {
                 WebClient c = new();
@@ -75,8 +77,7 @@ namespace ShortcutMaker
                 {
                     optionsForm.labelInstalInfo.Text = $"{e.BytesReceived / 1024 / 1024}MB / {e.TotalBytesToReceive / 1024 / 1024}MB";
                 };
-                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\update");
-                string filePath = Directory.GetCurrentDirectory() + "\\update\\";
+                string filePath = Directory.GetCurrentDirectory() + "\\";
                 foreach (string file in filesToDownload)
                     await c.DownloadFileTaskAsync(githubProjectLink + "UpdateInstaller/UpdateFiles/" + file, filePath + "\\" + file);
                 try { Process.Start(filePath + "\\ShortcutMakerUpdate.exe"); } catch { }
@@ -84,6 +85,7 @@ namespace ShortcutMaker
             }
             catch { }
         }
+        #endregion
 
         private Form activeForm = null;
         public void OpenChildForm(Form childForm)
@@ -105,17 +107,17 @@ namespace ShortcutMaker
             ShortcutList.Add(sc);
             editForm.panel.Controls.Add(sc);
 
-            ShortcutButtonControl scB = new(sc.Id, sc.Title, sc.Path, sc.IsIconVisible, sc.TitleColor, sc.BackgroundColor, sc.ShortcutIcon, sc.FontSize, sc.IsAnimated);
+            ShortcutButtonControl scB = new(sc.Id, sc.Title, sc.Path, sc.IsIconVisible, sc.TitleColor, sc.BackgroundColor, sc.ShortcutIcon, sc.FontSize, sc.SelectedTextAlign, sc.IsAnimated);
             ShortcutButtonList.Add(scB);
             mainForm.panel.Controls.Add(scB);
         }
-        public void AddShortcut(string id, string title, string isIconVisible, string titleColor, string backgroundColor, string backgroundAlpha, string fontSize, string isAnimated, string path)
+        public void AddShortcut(string id, string title, string isIconVisible, string titleColor, string backgroundColor, string backgroundAlpha, string fontSize, string textAlign, string isAnimated, string path)
         {
-            ShortcutControl sc = new(id, title, isIconVisible, titleColor, backgroundColor, backgroundAlpha, fontSize, isAnimated, path);
+            ShortcutControl sc = new(id, title, isIconVisible, titleColor, backgroundColor, backgroundAlpha, fontSize, textAlign, isAnimated, path);
             ShortcutList.Add(sc);
             editForm.panel.Controls.Add(sc);
 
-            ShortcutButtonControl scB = new(sc.Id, sc.Title, sc.Path, sc.IsIconVisible, sc.TitleColor, sc.BackgroundColor, sc.ShortcutIcon, sc.FontSize, sc.IsAnimated);
+            ShortcutButtonControl scB = new(sc.Id, sc.Title, sc.Path, sc.IsIconVisible, sc.TitleColor, sc.BackgroundColor, sc.ShortcutIcon, sc.FontSize, sc.SelectedTextAlign, sc.IsAnimated);
             ShortcutButtonList.Add(scB);
             mainForm.panel.Controls.Add(scB);
         }
@@ -135,7 +137,7 @@ namespace ShortcutMaker
         {
             ShortcutControl sc = ShortcutList.First(x => x.Id == id);
             ShortcutButtonControl scB = ShortcutButtonList.First(x => x.Id == id);
-            scB.ChangeShortcutData(sc.Title, sc.Path, sc.IsIconVisible, sc.TitleColor, sc.BackgroundColor, sc.ShortcutIcon, sc.FontSize, sc.IsAnimated);
+            scB.ChangeShortcutData(sc.Title, sc.Path, sc.IsIconVisible, sc.TitleColor, sc.BackgroundColor, sc.ShortcutIcon, sc.FontSize, sc.SelectedTextAlign, sc.IsAnimated);
             //ShortcutViewPanel.Controls.Clear();
             //ShortcutViewPanel.Controls.AddRange(shortcutButtonList.ToArray());
             mainForm.panel.Refresh();
@@ -159,7 +161,7 @@ namespace ShortcutMaker
                 optionsForm.numericUpDown_MouseHover.Value = (int)settings["hover-opacity"];
                 optionsForm.colorPicker_MouseHover.SetColor(Color.FromArgb((int)optionsForm.numericUpDown_MouseHover.Value, (Color)settings["hover-color"]));
                 ShortcutButtonControl.HoverColor = optionsForm.colorPicker_MouseHover.SelectedColor;
-                optionsForm.numericUpDown_Size.Value = Settings.ShortcutButtonControl_Size = (int)settings["shortcut-size"] >= 80 || (int)settings["shortcut-size"] <= 120 ? (int)settings["shortcut-size"] : 80;
+                optionsForm.numericUpDown_Size.Value = Settings.ShortcutButtonControl_Size = (int)settings["shortcut-size"] < 80 || (int)settings["shortcut-size"] > 120 ? 80 : (int)settings["shortcut-size"];
                 ShortcutButtonControl.SCSize = new(Settings.ShortcutButtonControl_Size, Settings.ShortcutButtonControl_Size);
                 optionsForm.checkBoxBackgroundUseImage.Checked = (bool)settings["background-image-bool"];
                 optionsForm.BackgroundUseImageChanged();
@@ -185,7 +187,7 @@ namespace ShortcutMaker
                     if (string.IsNullOrEmpty(line))
                         continue;
                     string[] shortcutData = line.Split(";");
-                    AddShortcut(shortcutData[0], shortcutData[1], shortcutData[2], shortcutData[3], shortcutData[4], shortcutData[5], shortcutData[6], shortcutData[7], shortcutData[8]);
+                    AddShortcut(shortcutData[0], shortcutData[1], shortcutData[2], shortcutData[3], shortcutData[4], shortcutData[5], shortcutData[6], shortcutData[7], shortcutData[8], shortcutData[9]);
                 }
             }
         }
@@ -195,7 +197,7 @@ namespace ShortcutMaker
             using (StreamWriter sw = new(applicationDataDirectory + "shortcut.cfg"))
             {
                 foreach (ShortcutControl shortcut in ShortcutList)
-                    sw.WriteLine($"{shortcut.Id};{shortcut.Title};{shortcut.IsIconVisible};{$"{shortcut.TitleColor.R:X2}{shortcut.TitleColor.G:X2}{shortcut.TitleColor.B:X2}"};{$"{shortcut.BackgroundColor.R:X2}{shortcut.BackgroundColor.G:X2}{shortcut.BackgroundColor.B:X2}"};{(int)shortcut.BackgroundColor.A};{shortcut.FontSize};{shortcut.IsAnimated};{shortcut.Path}");
+                    sw.WriteLine($"{shortcut.Id};{shortcut.Title};{shortcut.IsIconVisible};{$"{shortcut.TitleColor.R:X2}{shortcut.TitleColor.G:X2}{shortcut.TitleColor.B:X2}"};{$"{shortcut.BackgroundColor.R:X2}{shortcut.BackgroundColor.G:X2}{shortcut.BackgroundColor.B:X2}"};{(int)shortcut.BackgroundColor.A};{shortcut.FontSize};{GetIdByAligment(shortcut.SelectedTextAlign)};{shortcut.IsAnimated};{shortcut.Path}");
             }
         }
 
@@ -299,6 +301,36 @@ namespace ShortcutMaker
             mainForm.ChangeIconsColor(c);
             editForm.ChangeIconsColor(c);
             optionsForm.ChangeIconsColor(c);
+        }
+        public static ContentAlignment GetAligmentById(int id)
+        {
+            return id switch
+            {
+                0 => ContentAlignment.TopLeft,
+                1 => ContentAlignment.TopCenter,
+                2 => ContentAlignment.TopRight,
+                3 => ContentAlignment.MiddleLeft,
+                4 => ContentAlignment.MiddleCenter,
+                5 => ContentAlignment.MiddleRight,
+                6 => ContentAlignment.BottomLeft,
+                7 => ContentAlignment.BottomCenter,
+                8 => ContentAlignment.BottomRight,
+            };
+        }
+        public static int GetIdByAligment(ContentAlignment align)
+        {
+            return align switch
+            {
+                ContentAlignment.TopLeft => 0,
+                ContentAlignment.TopCenter => 1,
+                ContentAlignment.TopRight => 2,
+                ContentAlignment.MiddleLeft => 3,
+                ContentAlignment.MiddleCenter => 4,
+                ContentAlignment.MiddleRight => 5,
+                ContentAlignment.BottomLeft => 6,
+                ContentAlignment.BottomCenter => 7,
+                ContentAlignment.BottomRight => 8,
+            };
         }
     }
 }

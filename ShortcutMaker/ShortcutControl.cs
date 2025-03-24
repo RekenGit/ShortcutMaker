@@ -8,9 +8,10 @@ namespace ShortcutMaker
         static int lastId = 0;
         public int Id { get; set; }
         public string Title { get; set; }
-        public Bitmap ShortcutIcon { get; set; } = new(120, 120);
+        public Bitmap ShortcutIcon { get; set; }
         public bool IsIconVisible { get; set; }
         public int FontSize { get; set; }
+        public ContentAlignment SelectedTextAlign { get; set; }
         public bool IsAnimated { get; set; }
         public string Path { get; set; }
         public Color TitleColor { get; set; }
@@ -20,19 +21,23 @@ namespace ShortcutMaker
         public ShortcutControl()
         {
             InitializeComponent();
+            labelTitle.Location = pictureBoxIcon.Location;
             labelTitle.Parent = pictureBoxIcon;
+            labelTitle.TextAlign = SelectedTextAlign = ContentAlignment.TopLeft;
+            comboBoxTextAlign.SelectedIndex = Form1.GetIdByAligment(SelectedTextAlign);
 
             Id = ++lastId;
             labelTitle.Text = Title = "Shortcut";
-            //ShortcutIcon = ResourceTemp.noImage;
             IsIconVisible = true;
             TitleColor = Color.White;
+            BackgroundColor = Color.Black;
             FontSize = 10;
             IsAnimated = true;
             isDoneCreating = true;
+            ShortcutIcon = new(120, 120);
             ShortcutIcon.Save(iconDirectoryPath + $"{Id}.png", ImageFormat.Png);
         }
-        public ShortcutControl(string id, string title, string isIconVisible, string color, string backColor, string backAlpha, string fontSize, string isAnimated, string path)
+        public ShortcutControl(string id, string title, string isIconVisible, string color, string backColor, string backAlpha, string fontSize, string textAlign, string isAnimated, string path)
         {
             if (!int.TryParse(id, out int _id))
             {
@@ -41,6 +46,10 @@ namespace ShortcutMaker
             }
             InitializeComponent();
             labelTitle.Parent = pictureBoxIcon;
+            labelTitle.Location = new(0, 0);
+            if (int.TryParse(textAlign, out int _textAlign))
+                SelectedTextAlign = labelTitle.TextAlign = Form1.GetAligmentById(_textAlign);
+            comboBoxTextAlign.SelectedIndex = Form1.GetIdByAligment(SelectedTextAlign);
 
             Id = _id;
             if (Id > lastId)
@@ -52,12 +61,11 @@ namespace ShortcutMaker
                 ShortcutIcon = new Bitmap(img);
                 img.Dispose();
             }
-            else
-                MessageBox.Show("Usuń to w huj");
-            //ShortcutIcon = ResourceTemp.noImage;
-            pictureBoxIcon.Image = ShortcutIcon;
             if (Boolean.TryParse(isIconVisible, out bool _isIconVisible))
-                pictureBoxIcon.Visible = checkBox1.Checked = IsIconVisible = _isIconVisible;
+            {
+                checkBox1.Checked = IsIconVisible = _isIconVisible;
+                pictureBoxIcon.BackgroundImage = _isIconVisible ? ShortcutIcon : null;
+            }
             TitleColor = labelTitle.ForeColor = (Color)new ColorConverter().ConvertFromString("#" + color);
             colorPickerPanelTitle.SetColor(TitleColor);
             if (!int.TryParse(backAlpha, out int _alpha))
@@ -66,6 +74,7 @@ namespace ShortcutMaker
                 return;
             }
             BackgroundColor = pictureBoxIcon.BackColor = Color.FromArgb(_alpha, (Color)new ColorConverter().ConvertFromString("#" + backColor));
+            colorPickerPanelBackground.SetColor(BackgroundColor);
             Path = textBox1.Text = path;
             if (!int.TryParse(fontSize, out int _fontSize))
                 _fontSize = 10;
@@ -75,6 +84,8 @@ namespace ShortcutMaker
                 checkBox2.Checked = IsAnimated = _isAnimated;
             isDoneCreating = true;
         }
+
+        public void ChangeSize(Size newSize) => labelTitle.Size = pictureBoxIcon.Size = newSize;
 
         private void RemoveButton_Click(object sender, EventArgs e)
         {
@@ -94,7 +105,8 @@ namespace ShortcutMaker
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string imageName = openFileDialog.FileName;
-                    pictureBoxIcon.Image = ShortcutIcon = new Bitmap(Image.FromFile(imageName), 120, 120);
+                    ShortcutIcon = new Bitmap(Image.FromFile(imageName), 120, 120);
+                    pictureBoxIcon.BackgroundImage = IsIconVisible ? ShortcutIcon : null;
                     ShortcutIcon.Save(iconDirectoryPath + $"{Id}.png", ImageFormat.Png);
                 }
             }
@@ -105,32 +117,6 @@ namespace ShortcutMaker
             Title = labelTitle.Text = titleTextBox.Text;
             ShortcutChanged();
         }
-        //private void ColorPicker_panel_Click(object sender, EventArgs e)
-        //{
-        //    ColorDialog MyDialog = new()
-        //    {
-        //        FullOpen = true,
-        //        Color = TitleColor
-        //    };
-        //    if (MyDialog.ShowDialog() == DialogResult.OK)
-        //        TitleColor = labelTitle.ForeColor = colorPicker_panel.BackColor = MyDialog.Color;
-        //    textBoxColor.Text = $"{TitleColor.R:X2}{TitleColor.G:X2}{TitleColor.B:X2}";
-        //    ShortcutChanged();
-        //}
-        //private void TextBoxColor_Leave(object sender, EventArgs e)
-        //{
-        //    string value = textBoxColor.Text.Replace("#", "");
-        //    if (value.Length > 6)
-        //        value = value.Substring(1, 6);
-        //    if (!VerifyHex(value))
-        //    {
-        //        MessageBox.Show($"Pleas make sure the digits are Hexadecimal.", "Wrong value", MessageBoxButtons.OK);
-        //        return;
-        //    }
-        //    textBoxColor.Text = value.PadLeft(6, '0').ToUpper();
-        //    TitleColor = labelTitle.ForeColor = colorPicker_panel.BackColor = (Color)new ColorConverter().ConvertFromString("#" + textBoxColor.Text);
-        //    ShortcutChanged();
-        //}
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
             Path = textBox1.Text;
@@ -138,21 +124,8 @@ namespace ShortcutMaker
         }
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
-            pictureBoxIcon.Visible = IsIconVisible = checkBox1.Checked;
-            if (IsIconVisible)
-            {
-                labelTitle.Parent = pictureBoxIcon;
-                labelTitle.Location = new Point(0, 0);
-                labelTitle.Padding = new Padding(0, 0, 0, 10);
-                labelTitle.TextAlign = ContentAlignment.BottomCenter;
-            }
-            else
-            {
-                labelTitle.Parent = this;
-                labelTitle.Location = new Point(3, 3);
-                labelTitle.Padding = new Padding(0);
-                labelTitle.TextAlign = ContentAlignment.MiddleCenter;
-            }
+            IsIconVisible = checkBox1.Checked;
+            pictureBoxIcon.BackgroundImage = IsIconVisible ? ShortcutIcon : null;
             ShortcutChanged();
         }
         private void NumericUpDownFontSize_ValueChanged(object sender, EventArgs e)
@@ -190,5 +163,10 @@ namespace ShortcutMaker
             ShortcutChanged();
         }
 
+        private void ComboBoxTextAlign_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectedTextAlign = labelTitle.TextAlign = Form1.GetAligmentById(comboBoxTextAlign.SelectedIndex);
+            ShortcutChanged();
+        }
     }
 }

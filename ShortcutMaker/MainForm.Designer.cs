@@ -148,7 +148,6 @@
             panel.Name = "panel";
             panel.Size = new Size(275, 173);
             panel.TabIndex = 3;
-            panel.Click += panel_Click;
             // 
             // MainForm
             // 

@@ -42,6 +42,7 @@
             colorPickerPanelBackground = new ColorPickerPanel();
             label3 = new Label();
             numericUpDownAlpha = new NumericUpDown();
+            comboBoxTextAlign = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFontSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownAlpha).BeginInit();
@@ -49,11 +50,11 @@
             // 
             // titleTextBox
             // 
-            titleTextBox.Location = new Point(3, 89);
+            titleTextBox.Location = new Point(3, 129);
             titleTextBox.MaxLength = 19;
             titleTextBox.Name = "titleTextBox";
             titleTextBox.PlaceholderText = "Name..";
-            titleTextBox.Size = new Size(122, 23);
+            titleTextBox.Size = new Size(121, 23);
             titleTextBox.TabIndex = 1;
             titleTextBox.TextChanged += TitleTextBox_TextChanged;
             // 
@@ -74,7 +75,7 @@
             // label1
             // 
             label1.ForeColor = Color.White;
-            label1.Location = new Point(145, 74);
+            label1.Location = new Point(145, 140);
             label1.Name = "label1";
             label1.Size = new Size(96, 15);
             label1.TabIndex = 8;
@@ -83,7 +84,7 @@
             // textBox1
             // 
             textBox1.Dock = DockStyle.Bottom;
-            textBox1.Location = new Point(0, 170);
+            textBox1.Location = new Point(0, 228);
             textBox1.MaxLength = 1000;
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
@@ -111,13 +112,11 @@
             labelTitle.FlatStyle = FlatStyle.Flat;
             labelTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTitle.ForeColor = Color.White;
-            labelTitle.Location = new Point(0, 0);
+            labelTitle.Location = new Point(44, 40);
             labelTitle.Name = "labelTitle";
-            labelTitle.Padding = new Padding(0, 0, 0, 10);
             labelTitle.Size = new Size(80, 80);
             labelTitle.TabIndex = 11;
             labelTitle.Text = "Title";
-            labelTitle.TextAlign = ContentAlignment.BottomCenter;
             labelTitle.UseMnemonic = false;
             labelTitle.Click += ImagePreview_Click;
             // 
@@ -129,14 +128,14 @@
             checkBox1.Cursor = Cursors.Hand;
             checkBox1.Font = new Font("Segoe UI", 8F);
             checkBox1.ForeColor = Color.White;
-            checkBox1.Location = new Point(96, 0);
+            checkBox1.Location = new Point(145, 81);
             checkBox1.Margin = new Padding(0);
             checkBox1.Name = "checkBox1";
             checkBox1.RightToLeft = RightToLeft.No;
-            checkBox1.Size = new Size(45, 52);
+            checkBox1.Size = new Size(96, 39);
             checkBox1.TabIndex = 12;
             checkBox1.Text = "Show img";
-            checkBox1.TextAlign = ContentAlignment.BottomCenter;
+            checkBox1.TextAlign = ContentAlignment.MiddleCenter;
             checkBox1.UseVisualStyleBackColor = true;
             checkBox1.CheckedChanged += CheckBox1_CheckedChanged;
             // 
@@ -148,14 +147,14 @@
             checkBox2.Cursor = Cursors.Hand;
             checkBox2.Font = new Font("Segoe UI", 8F);
             checkBox2.ForeColor = Color.White;
-            checkBox2.Location = new Point(159, 0);
+            checkBox2.Location = new Point(145, 40);
             checkBox2.Margin = new Padding(0);
             checkBox2.Name = "checkBox2";
             checkBox2.RightToLeft = RightToLeft.No;
-            checkBox2.Size = new Size(44, 52);
+            checkBox2.Size = new Size(96, 36);
             checkBox2.TabIndex = 13;
             checkBox2.Text = "Hover anims";
-            checkBox2.TextAlign = ContentAlignment.BottomCenter;
+            checkBox2.TextAlign = ContentAlignment.MiddleCenter;
             checkBox2.UseVisualStyleBackColor = true;
             checkBox2.CheckedChanged += CheckBox2_CheckedChanged;
             // 
@@ -163,7 +162,7 @@
             // 
             label2.AutoSize = true;
             label2.ForeColor = Color.White;
-            label2.Location = new Point(3, 129);
+            label2.Location = new Point(3, 185);
             label2.Name = "label2";
             label2.Size = new Size(57, 15);
             label2.TabIndex = 15;
@@ -172,7 +171,7 @@
             // numericUpDownFontSize
             // 
             numericUpDownFontSize.BorderStyle = BorderStyle.None;
-            numericUpDownFontSize.Location = new Point(3, 146);
+            numericUpDownFontSize.Location = new Point(3, 202);
             numericUpDownFontSize.Margin = new Padding(2);
             numericUpDownFontSize.Maximum = new decimal(new int[] { 40, 0, 0, 0 });
             numericUpDownFontSize.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -186,7 +185,7 @@
             // colorPickerPanelTitle
             // 
             colorPickerPanelTitle.BackColor = Color.Transparent;
-            colorPickerPanelTitle.Location = new Point(145, 92);
+            colorPickerPanelTitle.Location = new Point(145, 158);
             colorPickerPanelTitle.Name = "colorPickerPanelTitle";
             colorPickerPanelTitle.Size = new Size(96, 20);
             colorPickerPanelTitle.TabIndex = 19;
@@ -195,7 +194,7 @@
             // colorPickerPanelBackground
             // 
             colorPickerPanelBackground.BackColor = Color.Transparent;
-            colorPickerPanelBackground.Location = new Point(145, 146);
+            colorPickerPanelBackground.Location = new Point(145, 202);
             colorPickerPanelBackground.Name = "colorPickerPanelBackground";
             colorPickerPanelBackground.Size = new Size(96, 20);
             colorPickerPanelBackground.TabIndex = 21;
@@ -204,7 +203,7 @@
             // label3
             // 
             label3.ForeColor = Color.White;
-            label3.Location = new Point(96, 128);
+            label3.Location = new Point(96, 184);
             label3.Name = "label3";
             label3.Size = new Size(145, 15);
             label3.TabIndex = 20;
@@ -213,7 +212,7 @@
             // numericUpDownAlpha
             // 
             numericUpDownAlpha.BorderStyle = BorderStyle.None;
-            numericUpDownAlpha.Location = new Point(96, 146);
+            numericUpDownAlpha.Location = new Point(96, 202);
             numericUpDownAlpha.Margin = new Padding(2);
             numericUpDownAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numericUpDownAlpha.Name = "numericUpDownAlpha";
@@ -223,10 +222,23 @@
             numericUpDownAlpha.Value = new decimal(new int[] { 10, 0, 0, 0 });
             numericUpDownAlpha.ValueChanged += NumericUpDownAlpha_ValueChanged;
             // 
+            // comboBoxTextAlign
+            // 
+            comboBoxTextAlign.FormattingEnabled = true;
+            comboBoxTextAlign.Items.AddRange(new object[] { "TopLeft", "TopCenter", "TopRight", "MiddleLeft", "MiddleCenter", "MiddleRight", "BottomLeft", "BottomCenter", "BottomRight" });
+            comboBoxTextAlign.Location = new Point(3, 158);
+            comboBoxTextAlign.Name = "comboBoxTextAlign";
+            comboBoxTextAlign.Size = new Size(121, 23);
+            comboBoxTextAlign.TabIndex = 23;
+            comboBoxTextAlign.SelectedIndexChanged += ComboBoxTextAlign_SelectedIndexChanged;
+            // 
             // ShortcutControl
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(80, 80, 100);
+            Controls.Add(labelTitle);
+            Controls.Add(pictureBoxIcon);
+            Controls.Add(comboBoxTextAlign);
             Controls.Add(numericUpDownAlpha);
             Controls.Add(colorPickerPanelBackground);
             Controls.Add(label3);
@@ -235,15 +247,13 @@
             Controls.Add(numericUpDownFontSize);
             Controls.Add(checkBox2);
             Controls.Add(checkBox1);
-            Controls.Add(labelTitle);
-            Controls.Add(pictureBoxIcon);
             Controls.Add(textBox1);
             Controls.Add(label1);
             Controls.Add(removeButton);
             Controls.Add(titleTextBox);
             Margin = new Padding(5, 3, 5, 3);
             Name = "ShortcutControl";
-            Size = new Size(244, 233);
+            Size = new Size(244, 291);
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFontSize).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownAlpha).EndInit();
@@ -266,5 +276,6 @@
         private ColorPickerPanel colorPickerPanelBackground;
         private Label label3;
         private NumericUpDown numericUpDownAlpha;
+        private ComboBox comboBoxTextAlign;
     }
 }

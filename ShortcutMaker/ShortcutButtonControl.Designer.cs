@@ -37,6 +37,7 @@
             // 
             pictureBox1.BackgroundImageLayout = ImageLayout.None;
             pictureBox1.Dock = DockStyle.Fill;
+            pictureBox1.Image = ResourceTemp.no_image;
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(80, 80);
@@ -48,18 +49,15 @@
             // label1
             // 
             label1.BackColor = Color.FromArgb(30, 0, 0, 0);
-            label1.Dock = DockStyle.Fill;
             label1.FlatStyle = FlatStyle.Flat;
             label1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             label1.ForeColor = Color.White;
-            label1.Location = new Point(0, 0);
+            label1.Location = new Point(18, 36);
             label1.Margin = new Padding(3);
             label1.Name = "label1";
-            label1.Padding = new Padding(0, 0, 0, 10);
             label1.Size = new Size(80, 80);
             label1.TabIndex = 4;
             label1.Text = "Title";
-            label1.TextAlign = ContentAlignment.BottomCenter;
             label1.UseMnemonic = false;
             label1.Click += ShortcutButtonControl_Click;
             label1.MouseEnter += ShortcutButtonControl_MouseHover;

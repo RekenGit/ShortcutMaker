@@ -17,34 +17,22 @@ namespace ShortcutMaker
             label1.BackColor = HoverColor;
         }
 
-        public ShortcutButtonControl(int id, string title, string path, bool isIconVisible, Color titleColor, Color backgroundColor, Bitmap icon, int fontSize, bool isAnimated)
+        public ShortcutButtonControl(int id, string title, string path, bool isIconVisible, Color titleColor, Color backgroundColor, Bitmap icon, int fontSize, ContentAlignment textAlign, bool isAnimated)
         {
             InitializeComponent();
             Id = id;
-            ChangeShortcutData(title, path, isIconVisible, titleColor, backgroundColor, icon, fontSize, isAnimated);
+            label1.Dock = DockStyle.Fill;
+            label1.Parent = pictureBox1;
+            ChangeShortcutData(title, path, isIconVisible, titleColor, backgroundColor, icon, fontSize, textAlign, isAnimated);
         }
-        public void ChangeShortcutData(string title, string path, bool isIconVisible, Color titleColor, Color backgroundColor, Bitmap icon, int fontSize, bool isAnimated)
+        public void ChangeShortcutData(string title, string path, bool isIconVisible, Color titleColor, Color backgroundColor, Bitmap icon, int fontSize, ContentAlignment textAlign, bool isAnimated)
         {
             label1.Text = title;
+            label1.TextAlign = textAlign;
             label1.ForeColor = titleColor;
-            pictureBox1.Image = icon;
+            pictureBox1.Image = isIconVisible ? icon : null;
             shortcutPath = path;
-            pictureBox1.Visible = isIconVisible;
             BackColor = backgroundColor;
-            if (isIconVisible)
-            {
-                label1.Parent = pictureBox1;
-                label1.Location = new Point(0, 0);
-                label1.Padding = new Padding(0, 0, 0, 10);
-                label1.TextAlign = ContentAlignment.BottomCenter;
-            }
-            else
-            {
-                label1.Parent = this;
-                label1.Location = new Point(3, 3);
-                label1.TextAlign = ContentAlignment.MiddleCenter;
-                label1.Padding = new Padding(0);
-            }
             isShortcutAnimated = isAnimated;
             shortcutFontSize = fontSize;
             label1.Font = new Font("Segoe UI", shortcutFontSize, FontStyle.Bold);
@@ -59,7 +47,7 @@ namespace ShortcutMaker
             if (!isShortcutAnimated)
                 return;
             pictureBox1.SizeMode = isOver ? PictureBoxSizeMode.CenterImage : PictureBoxSizeMode.StretchImage;
-            if (pictureBox1.Visible)
+            if (pictureBox1.BackgroundImage != null)
                 return;
             label1.Font = new Font("Segoe UI", shortcutFontSize, isOver ? (FontStyle.Bold | FontStyle.Underline) : FontStyle.Bold);
         }
