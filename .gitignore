@@ -365,3 +365,4 @@ FodyWeavers.xsd
 !**/UpdateFiles/*
 !**/ShortcutMakerInstaller/*
 ShortcutMakerInstaller/Debug/*.exe
+ShortcutMakerInstaller/*.vdproj
