@@ -21,13 +21,23 @@ try
     message += "#2\n";
 
     var filePath = Directory.GetCurrentDirectory() + "\\";
-    foreach (string file in filesToDownload)
+    /*foreach (string file in filesToDownload)
     {
         message += $"Downloading file...  {githubProjectLink + file}\n";
         await c.DownloadFileTaskAsync(githubProjectLink + file, filePath + file);
-    }
+    }*/
+    await c.DownloadFileTaskAsync("https://github.com/RekenGit/ShortcutMaker/tree/master/ShortcutMakerInstaller/Debug/ShortcutMakerInstaller.msi", filePath + "ShortcutMakerInstaller.msi");
 
-    try { Process.Start(filePath + "ShortcutMaker.exe"); } catch { }
+    //try { Process.Start(filePath + "ShortcutMakerInstaller.msi"); } catch { }
+    Process process = new()
+    {
+        StartInfo = new ProcessStartInfo(filePath + "ShortcutMakerInstaller.msi")
+        {
+            UseShellExecute = true
+        }
+    };
+    process.Start();
+
     message += "#4\n";
     Process.GetCurrentProcess().Kill();
 }
