@@ -1,6 +1,5 @@
 ![shortcut-maker-logo](https://github.com/user-attachments/assets/bdd2dc28-9547-42d1-9158-c4cdc9ef9911)
-# Shortcu
-t Maker
+# Shortcut Maker
 🎯 Ever wanted a faster way to open your favorite folders or apps? With this app, you can create custom shortcuts and jump straight to what you need in just one click!
 <br>🔒 Hate when apps get in the way? Lock it on top and adjust the opacity so it’s always there but never blocking your screen.
 <br>🎨 Want everything to look just right? Customize each shortcut however you like icons, labels, and more.
