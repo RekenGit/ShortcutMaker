@@ -1,4 +1,5 @@
-﻿using System.Drawing.Imaging;
+﻿using System.Drawing;
+using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
 
 namespace ShortcutMaker
@@ -30,12 +31,40 @@ namespace ShortcutMaker
             labelTitle.Text = Title = "Shortcut";
             IsIconVisible = true;
             TitleColor = Color.White;
+            colorPickerPanelTitle.SetColor(TitleColor);
             BackgroundColor = Color.Black;
+            colorPickerPanelBackground.SetColor(BackgroundColor);
             FontSize = 10;
             IsAnimated = true;
             isDoneCreating = true;
-            ShortcutIcon = new(120, 120);
+            ShortcutIcon = new(ResourceTemp.no_image, 120, 120);
             ShortcutIcon.Save(iconDirectoryPath + $"{Id}.png", ImageFormat.Png);
+        }
+        public ShortcutControl(string title, Bitmap icon, bool isIconVisible, int fontSize, ContentAlignment textAlign, bool isAnimated, string path, Color titleColor, Color backColor)
+        {
+            InitializeComponent();
+            labelTitle.Parent = pictureBoxIcon;
+            labelTitle.Location = new(0, 0);
+
+            Id = ++lastId;
+            titleTextBox.Text = labelTitle.Text = Title = title;
+            Image img = icon;
+            ShortcutIcon = new Bitmap(img);
+            //img.Dispose();
+            if (!File.Exists(iconDirectoryPath + $"{Id}.png"))
+                ShortcutIcon.Save(iconDirectoryPath + $"{Id}.png", ImageFormat.Png);
+            checkBox1.Checked = IsIconVisible = isIconVisible;
+            pictureBoxIcon.BackgroundImage = IsIconVisible ? ShortcutIcon : null;
+            numericUpDownFontSize.Value = FontSize = fontSize;
+            SelectedTextAlign = labelTitle.TextAlign = textAlign;
+            checkBox2.Checked = IsAnimated = isAnimated;
+            Path = textBox1.Text = path;
+            TitleColor = labelTitle.ForeColor = titleColor;
+            colorPickerPanelTitle.SetColor(TitleColor);
+            BackgroundColor = pictureBoxIcon.BackColor = backColor;
+            colorPickerPanelBackground.SetColor(BackgroundColor);
+
+            isDoneCreating = true;
         }
         public ShortcutControl(string id, string title, string isIconVisible, string color, string backColor, string backAlpha, string fontSize, string textAlign, string isAnimated, string path)
         {
@@ -47,9 +76,6 @@ namespace ShortcutMaker
             InitializeComponent();
             labelTitle.Parent = pictureBoxIcon;
             labelTitle.Location = new(0, 0);
-            if (int.TryParse(textAlign, out int _textAlign))
-                SelectedTextAlign = labelTitle.TextAlign = Form1.GetAligmentById(_textAlign);
-            comboBoxTextAlign.SelectedIndex = Form1.GetIdByAligment(SelectedTextAlign);
 
             Id = _id;
             if (Id > lastId)
@@ -82,6 +108,9 @@ namespace ShortcutMaker
             labelTitle.Font = new Font("Segoe UI", (int)numericUpDownFontSize.Value, FontStyle.Bold);
             if (Boolean.TryParse(isAnimated, out bool _isAnimated))
                 checkBox2.Checked = IsAnimated = _isAnimated;
+            if (int.TryParse(textAlign, out int _textAlign))
+                SelectedTextAlign = labelTitle.TextAlign = Form1.GetAligmentById(_textAlign);
+            comboBoxTextAlign.SelectedIndex = Form1.GetIdByAligment(SelectedTextAlign);
             isDoneCreating = true;
         }
 

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            //System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             viewPanel = new Panel();
             SuspendLayout();
             // 
@@ -46,7 +46,7 @@
             BackColor = Color.Gray;
             ClientSize = new Size(311, 173);
             Controls.Add(viewPanel);
-            //Icon = (Icon)resources.GetObject("$this.Icon");
+            Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             MinimumSize = new Size(242, 212);
             Name = "Form1";

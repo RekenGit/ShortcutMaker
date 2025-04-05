@@ -31,9 +31,9 @@
             panel1 = new Panel();
             opacityScrollBar = new VScrollBar();
             panel2 = new Panel();
-            editButton = new Button();
             lockWindowButton = new Button();
             optionsButton = new Button();
+            editButton = new Button();
             panel = new FlowLayoutPanel();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -77,26 +77,6 @@
             panel2.Size = new Size(8, 63);
             panel2.TabIndex = 6;
             // 
-            // editButton
-            // 
-            editButton.BackColor = Color.Transparent;
-            editButton.BackgroundImage = ResourceTemp.editIcon;
-            editButton.BackgroundImageLayout = ImageLayout.Center;
-            editButton.Cursor = Cursors.Hand;
-            editButton.Dock = DockStyle.Top;
-            editButton.FlatAppearance.BorderSize = 0;
-            editButton.FlatAppearance.CheckedBackColor = Color.Transparent;
-            editButton.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            editButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(80, 80, 90);
-            editButton.FlatStyle = FlatStyle.Flat;
-            editButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            editButton.Location = new Point(0, 0);
-            editButton.Name = "editButton";
-            editButton.Size = new Size(36, 36);
-            editButton.TabIndex = 5;
-            editButton.UseVisualStyleBackColor = false;
-            editButton.Click += EditButton_Click;
-            // 
             // lockWindowButton
             // 
             lockWindowButton.BackColor = Color.Transparent;
@@ -138,6 +118,26 @@
             optionsButton.UseVisualStyleBackColor = false;
             optionsButton.Click += OptionsButton_Click;
             // 
+            // editButton
+            // 
+            editButton.BackColor = Color.Transparent;
+            editButton.BackgroundImage = ResourceTemp.editIcon;
+            editButton.BackgroundImageLayout = ImageLayout.Center;
+            editButton.Cursor = Cursors.Hand;
+            editButton.Dock = DockStyle.Top;
+            editButton.FlatAppearance.BorderSize = 0;
+            editButton.FlatAppearance.CheckedBackColor = Color.Transparent;
+            editButton.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            editButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(80, 80, 90);
+            editButton.FlatStyle = FlatStyle.Flat;
+            editButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            editButton.Location = new Point(0, 0);
+            editButton.Name = "editButton";
+            editButton.Size = new Size(36, 36);
+            editButton.TabIndex = 5;
+            editButton.UseVisualStyleBackColor = false;
+            editButton.Click += EditButton_Click;
+            // 
             // panel
             // 
             panel.AutoScroll = true;
@@ -167,10 +167,10 @@
         #endregion
         private Button editButton;
         private Button optionsButton;
-        private Button lockWindowButton;
         public VScrollBar opacityScrollBar;
         public FlowLayoutPanel panel;
         public Panel panel1;
         private Panel panel2;
+        public Button lockWindowButton;
     }
 }

@@ -51,9 +51,24 @@ namespace ShortcutMaker
                 return;
             label1.Font = new Font("Segoe UI", shortcutFontSize, isOver ? (FontStyle.Bold | FontStyle.Underline) : FontStyle.Bold);
         }
-
+        private ShortcutRightClickMenu formMenu;
+        public void OpenMenuForm()
+        {
+            formMenu?.Close();
+            formMenu = new();
+            formMenu.Show();
+            formMenu.Location = Cursor.Position;
+            formMenu.ShortcutId = Id;
+        }
         private void ShortcutButtonControl_Click(object sender, EventArgs e)
         {
+            MouseEventArgs me = (MouseEventArgs)e;
+            if (me.Button == MouseButtons.Right)
+            {
+                OpenMenuForm();
+                return;
+            }
+
             if (string.IsNullOrEmpty(shortcutPath))
             {
                 MessageBox.Show($"Path for shortcut named \"{label1.Text}\" is not set yet.");

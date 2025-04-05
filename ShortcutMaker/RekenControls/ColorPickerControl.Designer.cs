@@ -1,6 +1,6 @@
-﻿namespace ShortcutMaker
+﻿namespace ShortcutMaker.RekenControls
 {
-    partial class ColorPickerPanel
+    partial class ColorPickerControl
     {
         /// <summary> 
         /// Wymagana zmienna projektanta.

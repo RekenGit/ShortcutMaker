@@ -1,4 +1,5 @@
-﻿namespace ShortcutMaker
+﻿using ShortcutMaker.RekenControls;
+namespace ShortcutMaker
 {
     partial class ShortcutControl
     {
@@ -38,8 +39,8 @@
             checkBox2 = new CheckBox();
             label2 = new Label();
             numericUpDownFontSize = new NumericUpDown();
-            colorPickerPanelTitle = new ColorPickerPanel();
-            colorPickerPanelBackground = new ColorPickerPanel();
+            colorPickerPanelTitle = new ColorPickerControl();
+            colorPickerPanelBackground = new ColorPickerControl();
             label3 = new Label();
             numericUpDownAlpha = new NumericUpDown();
             comboBoxTextAlign = new ComboBox();
@@ -272,8 +273,8 @@
         private CheckBox checkBox2;
         private Label label2;
         private NumericUpDown numericUpDownFontSize;
-        private ColorPickerPanel colorPickerPanelTitle;
-        private ColorPickerPanel colorPickerPanelBackground;
+        private ColorPickerControl colorPickerPanelTitle;
+        private ColorPickerControl colorPickerPanelBackground;
         private Label label3;
         private NumericUpDown numericUpDownAlpha;
         private ComboBox comboBoxTextAlign;

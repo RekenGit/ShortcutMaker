@@ -1,4 +1,5 @@
-﻿namespace ShortcutMaker
+﻿using ShortcutMaker.RekenControls;
+namespace ShortcutMaker
 {
     partial class OptionsForm
     {
@@ -42,7 +43,7 @@
             panel3 = new Panel();
             label10 = new Label();
             comboBoxImageLayout = new ComboBox();
-            colorPickerPanelBackground = new ColorPickerPanel();
+            colorPickerPanelBackground = new ColorPickerControl();
             label9 = new Label();
             label8 = new Label();
             label4 = new Label();
@@ -56,7 +57,7 @@
             panel6 = new Panel();
             label3 = new Label();
             numericUpDown_MouseHover = new NumericUpDown();
-            colorPicker_MouseHover = new ColorPickerPanel();
+            colorPicker_MouseHover = new ColorPickerControl();
             label1 = new Label();
             label2 = new Label();
             panel1.SuspendLayout();
@@ -464,8 +465,8 @@
         public FlowLayoutPanel panel;
         private Panel panel6;
         private Label label1;
-        public ColorPickerPanel colorPicker_MouseHover;
-        private ColorPickerPanel colorPickerPanel1;
+        public ColorPickerControl colorPicker_MouseHover;
+        private ColorPickerControl colorPickerPanel1;
         private Label label3;
         private Label label2;
         public NumericUpDown numericUpDown_MouseHover;
@@ -480,7 +481,7 @@
         public Panel panelBackgroundImage;
         private Label label8;
         private Label label9;
-        public ColorPickerPanel colorPickerPanelBackground;
+        public ColorPickerControl colorPickerPanelBackground;
         public CheckBox checkBoxBackgroundUseImage;
         public Panel panel1;
         private Label label10;

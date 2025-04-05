@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel;
 using System.Text.RegularExpressions;
 
-namespace ShortcutMaker
+namespace ShortcutMaker.RekenControls
 {
-    public partial class ColorPickerPanel : UserControl
+    public partial class ColorPickerControl : UserControl
     {
         public Color SelectedColor { get; private set; }
         private string lastTextColor = "";
-        public ColorPickerPanel()
+        public ColorPickerControl()
         {
             InitializeComponent();
         }

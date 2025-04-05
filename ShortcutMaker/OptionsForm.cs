@@ -57,7 +57,7 @@ namespace ShortcutMaker
 
         private static void RefreshItems()
         {
-            foreach (ShortcutButtonControl button in Form1.BaseForm.ShortcutButtonList)
+            foreach (ShortcutButtonControl button in Form1.BaseForm.mainForm.panel.Controls)
                 button.RefreshShortcut();
             foreach (ShortcutControl button in Form1.BaseForm.ShortcutList)
                 button.ChangeSize(new(Settings.ShortcutButtonControl_Size, Settings.ShortcutButtonControl_Size));

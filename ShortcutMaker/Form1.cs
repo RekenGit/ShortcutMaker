@@ -121,16 +121,34 @@ namespace ShortcutMaker
             ShortcutButtonList.Add(scB);
             mainForm.panel.Controls.Add(scB);
         }
+        public void CloneShortcut(int Id)
+        {
+            ShortcutControl orginal = ShortcutList.First(x => x.Id == Id);
 
+            ShortcutControl sc = new(orginal.Title, orginal.ShortcutIcon, orginal.IsIconVisible, orginal.FontSize, orginal.SelectedTextAlign, orginal.IsAnimated, orginal.Path, orginal.TitleColor, orginal.BackgroundColor);
+            ShortcutList.Add(sc);
+            editForm.panel.Controls.Add(sc);
+
+            ShortcutButtonControl scB = new(sc.Id, sc.Title, sc.Path, sc.IsIconVisible, sc.TitleColor, sc.BackgroundColor, sc.ShortcutIcon, sc.FontSize, sc.SelectedTextAlign, sc.IsAnimated);
+            ShortcutButtonList.Add(scB);
+            mainForm.panel.Controls.Add(scB);
+
+            SaveShortcuts();
+        }
         public void RemoveShortcut(int id)
         {
+
             ShortcutControl sc = ShortcutList.First(x => x.Id == id);
+            if (File.Exists(applicationDataDirectory + $"Icons\\{sc.Id}.png"))
+                File.Delete(applicationDataDirectory + $"Icons\\{sc.Id}.png");
             editForm.panel.Controls.Remove(sc);
             ShortcutList.Remove(sc);
 
             ShortcutButtonControl scB = ShortcutButtonList.First(x => x.Id == id);
             mainForm.panel.Controls.Remove(scB);
             ShortcutButtonList.Remove(scB);
+
+            SaveShortcuts();
         }
 
         public void ChangeShortcut(int id)
@@ -237,7 +255,7 @@ namespace ShortcutMaker
                 sw.Write(Settings.GenerateCFGFileFromDictionary(settings));
             }
         }
-
+        #endregion
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -247,6 +265,11 @@ namespace ShortcutMaker
                         this.viewPanel.Focus();
                     break;
                 case Keys.F1:
+                    if (activeForm == mainForm)
+                    {
+                        mainForm.lockWindowButton.PerformClick();
+                        return;
+                    }
                     OpenChildForm(mainForm);
                     break;
                 case Keys.F2:
@@ -260,25 +283,37 @@ namespace ShortcutMaker
                     Size = new Size(Size.Width + (mainForm.panel1.Visible ? 36 : -36), Size.Height);
                     break;
                 case Keys.G:
-                    if (mainForm.isWindowLocked && RectangleToScreen(Bounds).Contains(PointToScreen(Cursor.Position)))
+                    if (!isFormMoving && mainForm.isWindowLocked && RectangleToScreen(Bounds).Contains(PointToScreen(Cursor.Position)))
                     {
-                        Cursor.Current = Cursors.SizeAll;
-                        BaseForm.Location = new Point(Cursor.Position.X - BaseForm.Width / 2, Cursor.Position.Y - BaseForm.Height / 2);
+                        isFormMoving = true;
+                        MoveFormToCursor();
                     }
+                    else
+                        isFormMoving = false;
                     break;
             }
 
             if (activeForm == optionsForm)
+            {
                 if (e.Control && e.KeyCode == Keys.S)
                     optionsForm.saveButton.PerformClick();
+            }
             else if (activeForm == editForm)
                 if (e.KeyCode == Keys.Enter)
                     SaveShortcuts();
-
             //Cursor.Current = Cursors.Default;
         }
-        #endregion
-
+        private bool isFormMoving = false;
+        private async Task MoveFormToCursor()
+        {
+            while (isFormMoving)
+            {
+                await Task.Delay(10);
+                Cursor.Current = Cursors.SizeAll;
+                BaseForm.Location = new Point(Cursor.Position.X - BaseForm.Width / 2, Cursor.Position.Y - BaseForm.Height / 2);
+            }
+            Cursor.Current = Cursors.Default;
+        }
         public void ChangeAplicationBackgroundColor(Color color)
         {
             viewPanel.BackColor = mainForm.BackColor = optionsForm.BackColor = editForm.BackColor = color;
@@ -332,5 +367,6 @@ namespace ShortcutMaker
                 ContentAlignment.BottomRight => 8,
             };
         }
+
     }
 }
