@@ -7,7 +7,7 @@ namespace ShortcutMaker
     {
         private readonly string version = "1.2";
         private readonly string githubProjectLink = "https://github.com/RekenGit/ShortcutMaker/tree/master/";
-        string[] filesToDownload = ["ShortcutMakerUpdate.deps.json", "ShortcutMakerUpdate.dll", "ShortcutMakerUpdate.exe", "ShortcutMakerUpdate.pdb", "ShortcutMakerUpdate.runtimeconfig.json"];
+        string[] filesToDownload = ["ShortcutMakerUpdateInstaller.deps.json", "ShortcutMakerUpdateInstaller.dll", "ShortcutMakerUpdateInstaller.exe", "ShortcutMakerUpdateInstaller.pdb", "ShortcutMakerUpdateInstaller.runtimeconfig.json"];
 
         public static Form1 BaseForm { get; private set; }
 
