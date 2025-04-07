@@ -5,7 +5,7 @@ namespace ShortcutMaker
 {
     public partial class Form1 : Form
     {
-        private readonly string version = "1.1";
+        private readonly string version = "1.2";
         private readonly string githubProjectLink = "https://github.com/RekenGit/ShortcutMaker/tree/master/";
         string[] filesToDownload = ["ShortcutMakerUpdate.deps.json", "ShortcutMakerUpdate.dll", "ShortcutMakerUpdate.exe", "ShortcutMakerUpdate.pdb", "ShortcutMakerUpdate.runtimeconfig.json"];
 
