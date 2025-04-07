@@ -29,6 +29,7 @@ namespace ShortcutMaker
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShortcutControl));
             titleTextBox = new TextBox();
             removeButton = new Button();
             label1 = new Label();
@@ -44,6 +45,7 @@ namespace ShortcutMaker
             label3 = new Label();
             numericUpDownAlpha = new NumericUpDown();
             comboBoxTextAlign = new ComboBox();
+            buttonSave = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFontSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownAlpha).BeginInit();
@@ -62,6 +64,9 @@ namespace ShortcutMaker
             // removeButton
             // 
             removeButton.BackColor = Color.IndianRed;
+            removeButton.BackgroundImage = ResourceTemp.trash;
+            removeButton.BackgroundImageLayout = ImageLayout.Zoom;
+            removeButton.Cursor = Cursors.Hand;
             removeButton.FlatStyle = FlatStyle.Flat;
             removeButton.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 238);
             removeButton.Location = new Point(219, 0);
@@ -69,7 +74,6 @@ namespace ShortcutMaker
             removeButton.Name = "removeButton";
             removeButton.Size = new Size(25, 25);
             removeButton.TabIndex = 2;
-            removeButton.Text = "X";
             removeButton.UseVisualStyleBackColor = false;
             removeButton.Click += RemoveButton_Click;
             // 
@@ -110,6 +114,7 @@ namespace ShortcutMaker
             // labelTitle
             // 
             labelTitle.BackColor = Color.Transparent;
+            labelTitle.Cursor = Cursors.Hand;
             labelTitle.FlatStyle = FlatStyle.Flat;
             labelTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTitle.ForeColor = Color.White;
@@ -233,10 +238,28 @@ namespace ShortcutMaker
             comboBoxTextAlign.TabIndex = 23;
             comboBoxTextAlign.SelectedIndexChanged += ComboBoxTextAlign_SelectedIndexChanged;
             // 
+            // buttonSave
+            // 
+            buttonSave.BackColor = Color.FromArgb(64, 64, 64);
+            buttonSave.BackgroundImage = (Image)resources.GetObject("buttonSave.BackgroundImage");
+            buttonSave.BackgroundImageLayout = ImageLayout.Stretch;
+            buttonSave.Cursor = Cursors.Hand;
+            buttonSave.FlatStyle = FlatStyle.Flat;
+            buttonSave.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            buttonSave.Location = new Point(190, 0);
+            buttonSave.Margin = new Padding(0, 0, 4, 0);
+            buttonSave.Name = "buttonSave";
+            buttonSave.Padding = new Padding(5);
+            buttonSave.Size = new Size(25, 25);
+            buttonSave.TabIndex = 24;
+            buttonSave.UseVisualStyleBackColor = false;
+            buttonSave.Click += buttonSave_Click;
+            // 
             // ShortcutControl
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(80, 80, 100);
+            Controls.Add(buttonSave);
             Controls.Add(labelTitle);
             Controls.Add(pictureBoxIcon);
             Controls.Add(comboBoxTextAlign);
@@ -278,5 +301,6 @@ namespace ShortcutMaker
         private Label label3;
         private NumericUpDown numericUpDownAlpha;
         private ComboBox comboBoxTextAlign;
+        private Button buttonSave;
     }
 }

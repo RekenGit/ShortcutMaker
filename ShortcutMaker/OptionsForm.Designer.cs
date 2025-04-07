@@ -307,6 +307,7 @@ namespace ShortcutMaker
             // 
             panelBackgroundImage.BackColor = Color.Silver;
             panelBackgroundImage.BackgroundImageLayout = ImageLayout.Zoom;
+            panelBackgroundImage.Cursor = Cursors.Hand;
             panelBackgroundImage.Location = new Point(120, 42);
             panelBackgroundImage.Margin = new Padding(1);
             panelBackgroundImage.Name = "panelBackgroundImage";

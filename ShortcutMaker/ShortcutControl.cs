@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
-using System.Text.RegularExpressions;
+﻿using System.Drawing.Imaging;
 
 namespace ShortcutMaker
 {
@@ -8,6 +6,7 @@ namespace ShortcutMaker
     {
         static int lastId = 0;
         public int Id { get; set; }
+        public bool IsAMenu { get; set; } = false;
         public string Title { get; set; }
         public Bitmap ShortcutIcon { get; set; }
         public bool IsIconVisible { get; set; }
@@ -17,8 +16,10 @@ namespace ShortcutMaker
         public string Path { get; set; }
         public Color TitleColor { get; set; }
         public Color BackgroundColor { get; set; }
+        public bool IsModified { get; private set; } = false;
         private bool isDoneCreating = false;
         private static readonly string iconDirectoryPath = Form1.applicationDataDirectory + "Icons\\";
+        #region Create
         public ShortcutControl()
         {
             InitializeComponent();
@@ -40,30 +41,25 @@ namespace ShortcutMaker
             ShortcutIcon = new(ResourceTemp.no_image, 120, 120);
             ShortcutIcon.Save(iconDirectoryPath + $"{Id}.png", ImageFormat.Png);
         }
-        public ShortcutControl(string title, Bitmap icon, bool isIconVisible, int fontSize, ContentAlignment textAlign, bool isAnimated, string path, Color titleColor, Color backColor)
+        //public ShortcutControl(string title, Bitmap icon, bool isIconVisible, int fontSize, ContentAlignment textAlign, bool isAnimated, string path, Color titleColor, Color backColor)
+        //{
+        //    InitializeComponent();
+        //    labelTitle.Parent = pictureBoxIcon;
+        //    labelTitle.Location = new(0, 0);
+
+        //    Id = ++lastId;
+        //    ChangeShortcutData(title, icon, isIconVisible, fontSize, textAlign, isAnimated, path, titleColor, backColor);
+
+        //    isDoneCreating = true;
+        //}
+        public ShortcutControl(ShortcutControl sc)
         {
             InitializeComponent();
             labelTitle.Parent = pictureBoxIcon;
             labelTitle.Location = new(0, 0);
 
             Id = ++lastId;
-            titleTextBox.Text = labelTitle.Text = Title = title;
-            Image img = icon;
-            ShortcutIcon = new Bitmap(img);
-            //img.Dispose();
-            if (!File.Exists(iconDirectoryPath + $"{Id}.png"))
-                ShortcutIcon.Save(iconDirectoryPath + $"{Id}.png", ImageFormat.Png);
-            checkBox1.Checked = IsIconVisible = isIconVisible;
-            pictureBoxIcon.BackgroundImage = IsIconVisible ? ShortcutIcon : null;
-            numericUpDownFontSize.Value = FontSize = fontSize;
-            SelectedTextAlign = labelTitle.TextAlign = textAlign;
-            checkBox2.Checked = IsAnimated = isAnimated;
-            Path = textBox1.Text = path;
-            TitleColor = labelTitle.ForeColor = titleColor;
-            colorPickerPanelTitle.SetColor(TitleColor);
-            BackgroundColor = pictureBoxIcon.BackColor = backColor;
-            colorPickerPanelBackground.SetColor(BackgroundColor);
-
+            ChangeShortcutData(sc.Title, sc.ShortcutIcon, sc.IsIconVisible, sc.FontSize, sc.SelectedTextAlign, sc.IsAnimated, sc.Path, sc.TitleColor, sc.colorPickerPanelBackground.SelectedColor, sc.IsModified);
             isDoneCreating = true;
         }
         public ShortcutControl(string id, string title, string isIconVisible, string color, string backColor, string backAlpha, string fontSize, string textAlign, string isAnimated, string path)
@@ -113,7 +109,39 @@ namespace ShortcutMaker
             comboBoxTextAlign.SelectedIndex = Form1.GetIdByAligment(SelectedTextAlign);
             isDoneCreating = true;
         }
+        #endregion
 
+        public void ChangeShortcutData(string title, Bitmap icon, bool isIconVisible, int fontSize, ContentAlignment textAlign, bool isAnimated, string path, Color titleColor, Color backColor, bool isModified)
+        {
+            titleTextBox.Text = labelTitle.Text = Title = title;
+            Image img = icon;
+            ShortcutIcon = new Bitmap(img);
+            //img.Dispose();
+            if (!File.Exists(iconDirectoryPath + $"{Id}.png"))
+                ShortcutIcon.Save(iconDirectoryPath + $"{Id}.png", ImageFormat.Png);
+            checkBox1.Checked = IsIconVisible = isIconVisible;
+            pictureBoxIcon.BackgroundImage = IsIconVisible ? ShortcutIcon : null;
+            numericUpDownFontSize.Value = FontSize = fontSize;
+            SelectedTextAlign = labelTitle.TextAlign = textAlign;
+            comboBoxTextAlign.SelectedIndex = Form1.GetIdByAligment(SelectedTextAlign);
+            checkBox2.Checked = IsAnimated = isAnimated;
+            Path = textBox1.Text = path;
+            TitleColor = labelTitle.ForeColor = titleColor;
+            colorPickerPanelTitle.SetColor(TitleColor);
+            colorPickerPanelBackground.SetColor(backColor);
+            numericUpDownAlpha.Value = backColor.A;
+            BackgroundColor = pictureBoxIcon.BackColor = colorPickerPanelBackground.SelectedColor;
+            if (isModified)
+            {
+                IsModified = true;
+                buttonSave.BackColor = Color.YellowGreen;
+            }
+            else
+            {
+                IsModified = false;
+                buttonSave.BackColor = Color.FromArgb(0, 64, 64, 64);
+            }
+        }
         public void ChangeSize(Size newSize) => labelTitle.Size = pictureBoxIcon.Size = newSize;
 
         private void RemoveButton_Click(object sender, EventArgs e)
@@ -139,63 +167,96 @@ namespace ShortcutMaker
                     ShortcutIcon.Save(iconDirectoryPath + $"{Id}.png", ImageFormat.Png);
                 }
             }
-            ShortcutChanged();
+
+            ShortcutGotModified();
         }
         private void TitleTextBox_TextChanged(object sender, EventArgs e)
         {
             Title = labelTitle.Text = titleTextBox.Text;
-            ShortcutChanged();
+
+            ShortcutGotModified();
         }
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
             Path = textBox1.Text;
-            ShortcutChanged();
+
+            ShortcutGotModified();
         }
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
             IsIconVisible = checkBox1.Checked;
             pictureBoxIcon.BackgroundImage = IsIconVisible ? ShortcutIcon : null;
-            ShortcutChanged();
+
+            ShortcutGotModified();
         }
         private void NumericUpDownFontSize_ValueChanged(object sender, EventArgs e)
         {
             FontSize = (int)numericUpDownFontSize.Value;
             labelTitle.Font = new Font("Segoe UI", FontSize, FontStyle.Bold);
-            ShortcutChanged();
+
+            ShortcutGotModified();
         }
         private void CheckBox2_CheckedChanged(object sender, EventArgs e)
         {
             IsAnimated = checkBox2.Checked;
-            ShortcutChanged();
-        }
-        private void ShortcutChanged()
-        {
-            if (isDoneCreating)
-                Form1.BaseForm.ChangeShortcut(Id);
+
+            ShortcutGotModified();
         }
 
         private void ColorPickerPanelTitle_ColorChanged(object sender, EventArgs e)
         {
             TitleColor = labelTitle.ForeColor = colorPickerPanelTitle.SelectedColor;
-            ShortcutChanged();
+
+            ShortcutGotModified();
         }
 
         private void NumericUpDownAlpha_ValueChanged(object sender, EventArgs e)
         {
             BackgroundColor = pictureBoxIcon.BackColor = Color.FromArgb((int)numericUpDownAlpha.Value, colorPickerPanelBackground.SelectedColor);
-            ShortcutChanged();
+            colorPickerPanelBackground.SetColor(BackgroundColor);
+
+            ShortcutGotModified();
         }
 
         private void ColorPickerPanelBackground_ColorChanged(object sender, EventArgs e)
         {
             BackgroundColor = pictureBoxIcon.BackColor = Color.FromArgb((int)numericUpDownAlpha.Value, colorPickerPanelBackground.SelectedColor);
-            ShortcutChanged();
+            colorPickerPanelBackground.SetColor(BackgroundColor);
+
+            ShortcutGotModified();
         }
 
         private void ComboBoxTextAlign_SelectedIndexChanged(object sender, EventArgs e)
         {
             SelectedTextAlign = labelTitle.TextAlign = Form1.GetAligmentById(comboBoxTextAlign.SelectedIndex);
-            ShortcutChanged();
+
+            ShortcutGotModified();
+        }
+        private void ShortcutGotModified()
+        {
+            if (isDoneCreating)
+            {
+                IsModified = true;
+                buttonSave.BackColor = Color.YellowGreen;
+            }
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            IsModified = false;
+            buttonSave.BackColor = Color.FromArgb(0, 64, 64, 64);
+            SetChangesToOrginal();
+
+            Form1.BaseForm.ChangeShortcut(Id, IsAMenu);
+        }
+
+        public void SetChangesToOrginal()
+        {
+            if (IsAMenu)
+            {
+                ShortcutControl orginal = Form1.BaseForm.ShortcutList.First(x => x.Id == Id);
+                orginal?.ChangeShortcutData(Title, ShortcutIcon, IsIconVisible, FontSize, SelectedTextAlign, IsAnimated, Path, TitleColor, BackgroundColor, IsModified);
+            }
         }
     }
 }

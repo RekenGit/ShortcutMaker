@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ColorPickerControl));
             textBoxColor = new TextBox();
             colorPicker_panel = new Panel();
+            panel1 = new Panel();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // textBoxColor
@@ -52,23 +55,37 @@
             // 
             // colorPicker_panel
             // 
+            colorPicker_panel.BackgroundImageLayout = ImageLayout.Center;
             colorPicker_panel.BorderStyle = BorderStyle.FixedSingle;
+            colorPicker_panel.Cursor = Cursors.Hand;
             colorPicker_panel.Dock = DockStyle.Fill;
-            colorPicker_panel.Location = new Point(56, 0);
+            colorPicker_panel.Location = new Point(0, 0);
             colorPicker_panel.Name = "colorPicker_panel";
             colorPicker_panel.Size = new Size(37, 20);
             colorPicker_panel.TabIndex = 19;
             colorPicker_panel.Click += ColorPicker_panel_Click;
             // 
-            // ColorPickerPanel
+            // panel1
+            // 
+            panel1.BackgroundImage = (Image)resources.GetObject("panel1.BackgroundImage");
+            panel1.BackgroundImageLayout = ImageLayout.Center;
+            panel1.Controls.Add(colorPicker_panel);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(56, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(37, 20);
+            panel1.TabIndex = 21;
+            // 
+            // ColorPickerControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Transparent;
-            Controls.Add(colorPicker_panel);
+            Controls.Add(panel1);
             Controls.Add(textBoxColor);
-            Name = "ColorPickerPanel";
+            Name = "ColorPickerControl";
             Size = new Size(93, 20);
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -77,5 +94,6 @@
 
         private TextBox textBoxColor;
         private Panel colorPicker_panel;
+        private Panel panel1;
     }
 }

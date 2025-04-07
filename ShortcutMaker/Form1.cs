@@ -121,11 +121,9 @@ namespace ShortcutMaker
             ShortcutButtonList.Add(scB);
             mainForm.panel.Controls.Add(scB);
         }
-        public void CloneShortcut(int Id)
+        public void CloneShortcut(int id)
         {
-            ShortcutControl orginal = ShortcutList.First(x => x.Id == Id);
-
-            ShortcutControl sc = new(orginal.Title, orginal.ShortcutIcon, orginal.IsIconVisible, orginal.FontSize, orginal.SelectedTextAlign, orginal.IsAnimated, orginal.Path, orginal.TitleColor, orginal.BackgroundColor);
+            ShortcutControl sc = new(ShortcutList.First(x => x.Id == id));
             ShortcutList.Add(sc);
             editForm.panel.Controls.Add(sc);
 
@@ -133,11 +131,10 @@ namespace ShortcutMaker
             ShortcutButtonList.Add(scB);
             mainForm.panel.Controls.Add(scB);
 
-            SaveShortcuts();
+            SaveShortcut(sc.Id);
         }
         public void RemoveShortcut(int id)
         {
-
             ShortcutControl sc = ShortcutList.First(x => x.Id == id);
             if (File.Exists(applicationDataDirectory + $"Icons\\{sc.Id}.png"))
                 File.Delete(applicationDataDirectory + $"Icons\\{sc.Id}.png");
@@ -148,17 +145,24 @@ namespace ShortcutMaker
             mainForm.panel.Controls.Remove(scB);
             ShortcutButtonList.Remove(scB);
 
-            SaveShortcuts();
+            SaveShortcut(id);
         }
 
-        public void ChangeShortcut(int id)
+        public void ChangeShortcut(int id, bool inMenu = false)
         {
             ShortcutControl sc = ShortcutList.First(x => x.Id == id);
             ShortcutButtonControl scB = ShortcutButtonList.First(x => x.Id == id);
             scB.ChangeShortcutData(sc.Title, sc.Path, sc.IsIconVisible, sc.TitleColor, sc.BackgroundColor, sc.ShortcutIcon, sc.FontSize, sc.SelectedTextAlign, sc.IsAnimated);
-            //ShortcutViewPanel.Controls.Clear();
-            //ShortcutViewPanel.Controls.AddRange(shortcutButtonList.ToArray());
-            mainForm.panel.Refresh();
+            if (inMenu)
+            {
+                editForm.panel.Controls.Clear();
+                editForm.panel.Controls.AddRange(ShortcutList.ToArray());
+                mainForm.panel.Controls.Clear();
+                mainForm.panel.Controls.AddRange(ShortcutButtonList.ToArray());
+            }
+            else
+                mainForm.panel.Refresh();
+            SaveShortcut(id);
         }
         #endregion
 
@@ -186,7 +190,7 @@ namespace ShortcutMaker
                 optionsForm.colorPickerPanelBackground.SetColor((Color)settings["background-color"]);
                 ChangeAplicationBackgroundColor(optionsForm.colorPickerPanelBackground.SelectedColor);
                 optionsForm.comboBoxImageLayout.SelectedIndex = (int)settings["background-layout"];
-                mainForm.panel.BackgroundImageLayout = (ImageLayout)optionsForm.comboBoxImageLayout.SelectedIndex;
+                optionsForm.panelBackgroundImage.BackgroundImageLayout = mainForm.panel.BackgroundImageLayout = (ImageLayout)optionsForm.comboBoxImageLayout.SelectedIndex;
 
                 optionsForm.FinishLoadingData();
             }
@@ -219,12 +223,42 @@ namespace ShortcutMaker
             }
         }
 
+        public void SaveShortcut(int id)
+        {
+            string file = "";
+            ShortcutControl? shortcut = ShortcutList.FirstOrDefault(x => x.Id == id);
+            using (StreamReader sr = new(applicationDataDirectory + "shortcut.cfg"))
+            {
+                bool isIdNew = true;
+                while (!sr.EndOfStream)
+                {
+                    string line = sr.ReadLine();
+                    if (line.Split(";")[0] != id.ToString())
+                    {
+                        file += line + "\n";
+                    }
+                    else
+                    {
+                        isIdNew = false;
+                        if (shortcut != null)
+                            file += $"{shortcut.Id};{shortcut.Title};{shortcut.IsIconVisible};{$"{shortcut.TitleColor.R:X2}{shortcut.TitleColor.G:X2}{shortcut.TitleColor.B:X2}"};{$"{shortcut.BackgroundColor.R:X2}{shortcut.BackgroundColor.G:X2}{shortcut.BackgroundColor.B:X2}"};{(int)shortcut.BackgroundColor.A};{shortcut.FontSize};{GetIdByAligment(shortcut.SelectedTextAlign)};{shortcut.IsAnimated};{shortcut.Path}\n";
+                    }
+                }
+                if (isIdNew)
+                {
+                    file += $"{shortcut.Id};{shortcut.Title};{shortcut.IsIconVisible};{$"{shortcut.TitleColor.R:X2}{shortcut.TitleColor.G:X2}{shortcut.TitleColor.B:X2}"};{$"{shortcut.BackgroundColor.R:X2}{shortcut.BackgroundColor.G:X2}{shortcut.BackgroundColor.B:X2}"};{(int)shortcut.BackgroundColor.A};{shortcut.FontSize};{GetIdByAligment(shortcut.SelectedTextAlign)};{shortcut.IsAnimated};{shortcut.Path}\n";
+                }
+            }
+            using (StreamWriter sw = new(applicationDataDirectory + "shortcut.cfg"))
+            {
+                sw.Write(file);
+            }
+        }
         public void SaveSettings()
         {
             Text = "Shortcut Maker";
             if (!File.Exists(applicationDataDirectory + "config.cfg"))
                 File.Create(applicationDataDirectory + "config.cfg").Close();
-
             using (StreamWriter sw = new(applicationDataDirectory + "config.cfg"))
             {
                 Dictionary<string[], object> settings = new()
@@ -232,7 +266,6 @@ namespace ShortcutMaker
                     {["Saved preferences", ""], null},
                     {["Aplication size (Min: Width=242, Height=212)", "size"], Size},
                     {["Aplication opacity in lock mode (10 - 100)", "opacity"], (int)mainForm.opacityScrollBar.Value},
-
                     {["Options", ""], null},
                     {["Mouse hover color", "hover-color"], optionsForm.colorPicker_MouseHover.SelectedColor},
                     {["Mouse hover opacity (0 - 255)", "hover-opacity"], (int)optionsForm.numericUpDown_MouseHover.Value},
@@ -240,7 +273,7 @@ namespace ShortcutMaker
                     {["Aplication background should be a image", "background-image-bool"], optionsForm.checkBoxBackgroundUseImage.Checked},
                     {["Aplication background color", "background-color"], optionsForm.colorPickerPanelBackground.SelectedColor},
                     {["Background image layout (0 - 4)", "background-layout"], optionsForm.comboBoxImageLayout.SelectedIndex},
-                    
+
                     //{["Test", ""], null},
                     //{["string", "1"], "test"},
                     //{["int", "2"], 123},
@@ -256,6 +289,7 @@ namespace ShortcutMaker
             }
         }
         #endregion
+        private readonly int appMinWidth = 242;
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -280,7 +314,15 @@ namespace ShortcutMaker
                     break;
                 case Keys.Home:
                     mainForm.panel1.Visible = !mainForm.panel1.Visible;
-                    Size = new Size(Size.Width + (mainForm.panel1.Visible ? 36 : -36), Size.Height);
+                    int width = Size.Width + (mainForm.panel1.Visible ? 36 : -36);
+                    if (MinimumSize.Width > width)
+                        MinimumSize = new Size(width, MinimumSize.Height);
+                    else
+                    {
+                        Size = new Size(width, Size.Height);
+                        MinimumSize = new Size(appMinWidth, MinimumSize.Height);
+                    }
+                    Size = new Size(width, Size.Height);
                     break;
                 case Keys.G:
                     if (!isFormMoving && mainForm.isWindowLocked && RectangleToScreen(Bounds).Contains(PointToScreen(Cursor.Position)))
@@ -298,10 +340,9 @@ namespace ShortcutMaker
                 if (e.Control && e.KeyCode == Keys.S)
                     optionsForm.saveButton.PerformClick();
             }
-            else if (activeForm == editForm)
-                if (e.KeyCode == Keys.Enter)
-                    SaveShortcuts();
-            //Cursor.Current = Cursors.Default;
+            //else if (activeForm == editForm)
+            //    if (e.KeyCode == Keys.Enter)
+            //        SaveShortcuts();
         }
         private bool isFormMoving = false;
         private async Task MoveFormToCursor()
@@ -368,5 +409,30 @@ namespace ShortcutMaker
             };
         }
 
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            bool optionsModified = Text.Contains('*');
+            bool shortcutModified = ShortcutList.FindAll(x => x.IsModified).Count > 0;
+            DialogResult result = DialogResult.No;
+            if (optionsModified && shortcutModified)
+                result = MessageBox.Show("Changes have been made to options and shortcuts.\nDo you want to save all of your changes?", "Save all", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            else if (optionsModified)
+                result = MessageBox.Show("Changes have been made to options.\nDo you want to save your changes?", "Save options", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            else if (shortcutModified)
+                result = MessageBox.Show("Changes have been made to shortcuts.\nDo you want to save your changes?", "Save shortcuts", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                if (optionsModified)
+                    SaveSettings();
+                if (shortcutModified)
+                    SaveShortcuts();
+            }
+            else if (result == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+                return;
+            }
+        }
     }
 }

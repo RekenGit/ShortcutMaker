@@ -9,8 +9,8 @@
 
         private void ReturnButton_Click(object sender, EventArgs e) 
         {
-            if (Form1.BaseForm.ShortcutList.Count >= 1)
-                Form1.BaseForm.SaveShortcuts();
+            //if (Form1.BaseForm.ShortcutList.Count >= 1)
+            //    Form1.BaseForm.SaveShortcuts();
 
             Form1.BaseForm.OpenChildForm(Form1.BaseForm.mainForm);
         }

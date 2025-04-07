@@ -127,7 +127,7 @@ namespace ShortcutMaker
             if (isLoading)
                 return;
 
-            Form1.BaseForm.mainForm.panel.BackgroundImageLayout = (ImageLayout)comboBoxImageLayout.SelectedIndex;
+            panelBackgroundImage.BackgroundImageLayout = Form1.BaseForm.mainForm.panel.BackgroundImageLayout = (ImageLayout)comboBoxImageLayout.SelectedIndex;
             UnsavedChanges();
         }
 

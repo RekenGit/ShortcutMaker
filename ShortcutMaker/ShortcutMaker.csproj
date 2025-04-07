@@ -6,11 +6,11 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>shortcut-maker-logo-256.ico</ApplicationIcon>
+    <ApplicationIcon>shortcut-maker-logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="shortcut-maker-logo-256.ico" />
+    <Content Include="shortcut-maker-logo.ico" />
   </ItemGroup>
 
   <ItemGroup>

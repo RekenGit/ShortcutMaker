@@ -52,6 +52,7 @@
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Shortcut Maker";
+            FormClosing += Form1_FormClosing;
             KeyDown += Form1_KeyDown;
             ResumeLayout(false);
         }
